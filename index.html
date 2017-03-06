@@ -33,8 +33,24 @@
         </script>
     </j-dashlet>
 
-    <button id="createDashboardBtn">Create Dashboard</button>
-    <button id="addDashletBtn">Add Dashlet</button>
+    <button id="createDashboardBtn" class="j-btn j-white">Create Dashboard</button>
+    <button id="addDashletBtn" class="j-btn j-white">Add Dashlet</button>
+
+
+    <div class="j-section j-padding-4" id="dashboard-edit-tools">
+        <div class="j-margin-bottom">
+            <div class="j-row-padding">
+                <div class="j-half">
+                    <button class="j-btn j-white" btn-group="dashboard-view-mode" id="readonly">View</button>
+                    <button class="j-btn j-white" btn-group="dashboard-view-mode" id="dashletedit">Dashlets</button>
+                    <button class="j-btn j-white" btn-group="dashboard-view-mode" id="layoutedit">Design</button>
+                </div>
+            </div>
+        </div>
+        <div id="dashlet-list" class="j-animate-zoom dashlet-list">
+        </div>
+    </div>
+
     <div id="dashboardList"></div>
 
     <j-dashboard id="dashboard" j-view-mode="dashletedit">
@@ -44,7 +60,19 @@
     <script>
         jdash.ready(function () {
 
+            var addDashletBtn = document.querySelector('#addDashletBtn');
             var dashboard = document.querySelector('#dashboard');
+
+            addDashletBtn.style.display = 'none';
+            dashboard.style.display = 'none';
+
+            function loadDashboard(id) {
+                dashboard.load(id).then(function () {
+                    addDashletBtn.style.display = '';
+                    dashboard.style.display = '';
+                    dashboard.setViewMode('dashletedit');
+                });
+            }
 
             function createDashboardList() {
                 var container = document.querySelector('#dashboardList');
@@ -52,20 +80,21 @@
                 return jdash.Provider.getMyDashboards().then(function (result) {
                     for (var i = 0; i < result.data.length; i++) {
                         var btn = document.createElement('button');
+                        btn.setAttribute("class",'j-btn j-white');
                         btn.textContent = result.data[i].title;
                         btn.id = result.data[i].id;
                         container.appendChild(btn);
                         btn.addEventListener('click', function (e) {
                             var idToLoad = e.target.id;
-                            dashboard.load(idToLoad);
+                            loadDashboard(idToLoad);
                         })
                     }
                 })
             }
 
             jdash.Provider.init({
-                apiKey: 'YOUR APIKEY',
-                userToken: 'USER TOKEN'
+                apiKey: 'YOUR API KEY',
+                userToken: 'YOUR DEMO TOKEN'
             })
 
             document.querySelector('#createDashboardBtn').addEventListener('click', function () {
@@ -76,15 +105,27 @@
                 }).then(function (result) {
                     console.log('Dashboard created with id:' + result.id);
                     createDashboardList();
-                    dashboard.load(result.id);
+                    loadDashboard(result.id);
                 }).catch(function (err) {
                     alert('There was an error creating dashboard: ' + err.message || err)
                 })
             })
 
-            document.querySelector('#addDashletBtn').addEventListener('click', function (e) {
+            addDashletBtn.addEventListener('click', function (e) {
                 dashboard.addDashlet('hello-world');
             })
+
+            document.querySelector('#readonly').addEventListener('click', function () {
+                dashboard.setAttribute('j-view-mode', 'readonly');
+            });
+
+            document.querySelector('#dashletedit').addEventListener('click', function () {
+                dashboard.setAttribute('j-view-mode', 'dashletedit');
+            });
+
+            document.querySelector('#layoutedit').addEventListener('click', function () {
+                dashboard.setAttribute('j-view-mode', 'layoutedit');
+            });
 
             createDashboardList();
         })
