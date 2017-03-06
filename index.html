@@ -80,7 +80,7 @@
                 return jdash.Provider.getMyDashboards().then(function (result) {
                     for (var i = 0; i < result.data.length; i++) {
                         var btn = document.createElement('button');
-                        btn.setAttribute("class",'j-btn j-white');
+                        btn.setAttribute("class", 'j-btn j-white');
                         btn.textContent = result.data[i].title;
                         btn.id = result.data[i].id;
                         container.appendChild(btn);
@@ -92,10 +92,17 @@
                 })
             }
 
-            jdash.Provider.init({
+            var providerInitParameters = {
                 apiKey: 'YOUR API KEY',
                 userToken: 'YOUR DEMO TOKEN'
-            })
+            }
+
+            if (providerInitParameters.apiKey === 'YOUR API KEY' || providerInitParameters.userToken === 'YOUR DEMO TOKEN') {
+                console.warn("Please go to : https://app.jdash.io and create an account, then get your demo user token and apiKey from there.");
+                alert('You must enter your API Key and demo user token at "providerInitParameters" variable in index.html. Detailed info written to debug console.');
+            }
+
+            jdash.Provider.init(providerInitParameters);
 
             document.querySelector('#createDashboardBtn').addEventListener('click', function () {
                 var title = window.prompt('Set a title for new dashboard');
