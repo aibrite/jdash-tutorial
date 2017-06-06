@@ -98,11 +98,12 @@
             }
 
             if (providerInitParameters.apiKey === 'YOUR API KEY' || providerInitParameters.userToken === 'YOUR DEMO TOKEN') {
-                console.warn("Please go to : https://app.jdash.io and create an account, then get your demo user token and apiKey from there.");
-                alert('You must enter your API Key and demo user token at "providerInitParameters" variable in index.html. Detailed info written to debug console.');
+                alert("Go to https://app.jdash.io and create a free account and get your user token and api key. See http://doc.jdash.io/client/getting-started for more information.");
             }
 
             jdash.Provider.init(providerInitParameters);
+
+            createDashboardList();
 
             document.querySelector('#createDashboardBtn').addEventListener('click', function () {
                 var title = window.prompt('Set a title for new dashboard');
@@ -133,8 +134,6 @@
             document.querySelector('#layoutedit').addEventListener('click', function () {
                 dashboard.setAttribute('j-view-mode', 'layoutedit');
             });
-
-            createDashboardList();
         })
     </script>
 </body>
