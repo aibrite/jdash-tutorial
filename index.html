@@ -76,8 +76,12 @@
 
             function createDashboardList() {
                 var container = document.querySelector('#dashboardList');
+
+                // clear existing buttons.
                 container.innerHTML = '';
                 return jdash.Provider.getMyDashboards().then(function (result) {
+
+                    // for each dashboard create a button
                     for (var i = 0; i < result.data.length; i++) {
                         var btn = document.createElement('button');
                         btn.setAttribute("class", 'j-btn j-white');
@@ -92,6 +96,7 @@
                 })
             }
 
+            // Provide your Api Key and User Token
             var providerInitParameters = {
                 apiKey: 'YOUR API KEY',
                 userToken: 'YOUR DEMO TOKEN'
@@ -101,6 +106,7 @@
                 alert("Go to https://app.jdash.io and create a free account and get your user token and api key. See http://doc.jdash.io/client/getting-started for more information.");
             }
 
+            // Initialize the Provider
             jdash.Provider.init(providerInitParameters);
 
             createDashboardList();
@@ -108,6 +114,7 @@
             document.querySelector('#createDashboardBtn').addEventListener('click', function () {
                 var title = window.prompt('Set a title for new dashboard');
 
+                // Create a new dashboard
                 jdash.Provider.createDashboard({
                     title: title
                 }).then(function (result) {
@@ -119,6 +126,7 @@
                 })
             })
 
+            // add hello world dashlet to dashboard
             addDashletBtn.addEventListener('click', function (e) {
                 dashboard.addDashlet('hello-world');
             })
